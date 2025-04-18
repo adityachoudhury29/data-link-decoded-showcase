@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ArrowLeft, Binary, Shield, AlertCircle } from "lucide-react";
+import { ArrowLeft, Binary, Shield, AlertCircle, DivideCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -166,7 +166,7 @@ const CRC = () => {
               <p>1. Append n-1 zeros to the message (where n is the length of the generator polynomial)</p>
             </div>
             <div className="flex items-start gap-3">
-              <Divide className="mt-1 h-6 w-6 text-purple-600" />
+              <DivideCircle className="mt-1 h-6 w-6 text-purple-600" />
               <p>2. Divide the result by the generator polynomial using binary division</p>
             </div>
             <div className="flex items-start gap-3">
