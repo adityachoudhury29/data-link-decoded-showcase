@@ -30,7 +30,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Suggest a Demo</h3>
             <p className="text-purple-100">
-              Have an idea for a new error correction demonstration? Let us know!
+              Have an idea for a new error correction demonstration? Let me know!
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <Textarea

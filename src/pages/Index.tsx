@@ -33,6 +33,10 @@ const Index = () => {
             onClick={() => navigate("/parity")}
           />
         </div>
+        <div className="mt-8 text-center text-gray-600">
+          <p className="text-lg font-semibold">Explore more algorithms and their implementations!</p>
+          <p className="mt-2">Click on the cards above to dive into each algorithm.</p>
+        </div>
       </main>
 
       <Footer />
