@@ -5,11 +5,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Github, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+
 const Footer = () => {
   const [suggestion, setSuggestion] = useState("");
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log("Suggestion submitted:", suggestion);
     e.preventDefault();
     if (suggestion.trim()) {
       toast({
