@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import HammingCode from "./pages/algorithms/HammingCode";
+import ParityCheck from "./pages/algorithms/ParityCheck";
+import CRC from "./pages/algorithms/CRC";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,6 +21,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/hamming" element={<HammingCode />} />
+          <Route path="/parity" element={<ParityCheck />} />
+          <Route path="/crc" element={<CRC />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
