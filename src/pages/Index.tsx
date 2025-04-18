@@ -1,12 +1,40 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Binary, Hash, Shield } from "lucide-react";
+import Header from "@/components/Header";
+import AlgorithmCard from "@/components/AlgorithmCard";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <main className="container mx-auto p-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <AlgorithmCard
+            title="Hamming Code"
+            description="Learn how Hamming codes can detect and correct single-bit errors in data transmission."
+            icon={<Binary className="h-6 w-6" />}
+            onClick={() => navigate("/hamming")}
+          />
+          <AlgorithmCard
+            title="CRC"
+            description="Explore Cyclic Redundancy Check (CRC) for error detection in digital networks."
+            icon={<Hash className="h-6 w-6" />}
+            onClick={() => navigate("/crc")}
+            className="opacity-50"
+          />
+          <AlgorithmCard
+            title="Parity Check"
+            description="Understand simple parity checking mechanisms for error detection."
+            icon={<Shield className="h-6 w-6" />}
+            onClick={() => navigate("/parity")}
+            className="opacity-50"
+          />
+        </div>
+      </main>
     </div>
   );
 };
