@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { set } from "date-fns";
 
 const CRC = () => {
   const [message, setMessage] = useState("1101");
@@ -13,7 +14,21 @@ const CRC = () => {
   const [crc, setCRC] = useState("");
   const [verification, setVerification] = useState<boolean | null>(null);
 
+  const isValidInput = (data: string, poly: string) => {
+    // Check if input is a binary string (only contains 0s and 1s)
+    const isValidData = /^[01]*$/.test(data);
+    const isValidPoly = /^[01]*$/.test(poly);
+    
+    if (!isValidData || !isValidPoly) {
+      alert("Please enter valid binary strings (only 0s and 1s).");
+      return false;
+    }
+    
+    return true;
+  }
+
   const calculateCRC = (data: string, poly: string) => {
+    if (!isValidInput(data, poly)) return; // Validate input before proceeding
     let dividend = data + "0".repeat(poly.length - 1);
     let divisor = poly;
     
@@ -80,7 +95,9 @@ const CRC = () => {
                 id="message-input"
                 type="text"
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => {
+                  setCRC("");
+                  setMessage(e.target.value)}}
                 className="font-mono"
                 maxLength={8}
                 pattern="[0-1]*"
@@ -92,7 +109,9 @@ const CRC = () => {
                 id="generator-input"
                 type="text"
                 value={generator}
-                onChange={(e) => setGenerator(e.target.value)}
+                onChange={(e) => {
+                  setCRC("");
+                  setGenerator(e.target.value)}}
                 className="font-mono"
                 maxLength={8}
                 pattern="[0-1]*"

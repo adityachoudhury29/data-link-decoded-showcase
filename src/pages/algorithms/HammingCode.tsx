@@ -11,8 +11,19 @@ const HammingCode = () => {
   const [error, setError] = useState("");
   const [corrected, setCorrected] = useState("");
 
+  const isValidInput = (data: string) => {
+    // Check if input is a binary string (only contains 0s and 1s)
+    const isValid = /^[01]*$/.test(data);
+    if (!isValid) {
+      alert("Please enter a valid binary string (only 0s and 1s).");
+      return false;
+    }
+    return true;
+  }
+
   const encode = (data: string) => {
     // Simple Hamming(7,4) implementation for demonstration
+    if (!isValidInput(data)) return; // Validate input before proceeding
     const d1 = parseInt(data[0]);
     const d2 = parseInt(data[1]);
     const d3 = parseInt(data[2]);

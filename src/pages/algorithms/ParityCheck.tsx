@@ -12,7 +12,20 @@ const ParityCheck = () => {
   const [parityBit, setParityBit] = useState("");
   const [error, setError] = useState(false);
 
+
+  const checkValidInput = (data: string) => {
+    // Check if input is a binary string (only contains 0s and 1s)    
+    const isValid = /^[01]*$/.test(data);
+    if (!isValid) {
+
+      alert("Please enter a valid binary string (only 0s and 1s).");
+      return false;
+    }
+    return true;  
+  }
+
   const calculateParity = (data: string) => {
+    if(!checkValidInput(data)) return; // Validate input before proceeding
     const ones = data.split('').filter(bit => bit === '1').length;
     // Even parity: if number of 1s is odd, add 1; if even, add 0
     const parity = ones % 2 === 0 ? '0' : '1';
@@ -45,32 +58,38 @@ const ParityCheck = () => {
           <h2 className="mb-4 text-xl font-semibold">Interactive Demo</h2>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="data-input">Input Data</Label>
-              <Input
-                id="data-input"
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="font-mono"
-                maxLength={8}
-                pattern="[0-1]*"
-              />
-            </div>
+                    <Label htmlFor="data-input">Input Data</Label>
+                    <Input
+                    id="data-input"
+                    type="text"
+                    value={input}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                      setParityBit("");
+                    }}
+                    className="font-mono"
+                    maxLength={8}
+                    pattern="[0-1]*"
+                    />
+                  </div>
             <div className="flex gap-2">
               <Button
-                onClick={() => calculateParity(input)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  calculateParity(input);
+                }}
                 className="bg-purple-600 hover:bg-purple-700"
               >
                 Calculate Parity
               </Button>
-              {parityBit && (
-                <Button
-                  onClick={() => checkForErrors(input, parityBit)}
-                  variant="outline"
-                >
-                  Check for Errors
-                </Button>
-              )}
+              {/* {parityBit && (
+                      <Button
+                        onClick={() => checkForErrors(input, parityBit)}
+                        variant="outline"
+                      >
+                        Check for Errors
+                      </Button>
+                      )} */}
             </div>
             {parityBit && (
               <div className="rounded-md bg-purple-50 p-4">

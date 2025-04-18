@@ -24,14 +24,14 @@ const Index = () => {
             description="Explore Cyclic Redundancy Check (CRC) for error detection in digital networks."
             icon={<Hash className="h-6 w-6" />}
             onClick={() => navigate("/crc")}
-            className="opacity-50"
+            
           />
           <AlgorithmCard
             title="Parity Check"
             description="Understand simple parity checking mechanisms for error detection."
             icon={<Shield className="h-6 w-6" />}
             onClick={() => navigate("/parity")}
-            className="opacity-50"
+           
           />
         </div>
       </main>
