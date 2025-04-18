@@ -1,33 +1,31 @@
 
 import { useState } from "react";
-import { ArrowLeft, Binary, Shield, AlertCircle } from "lucide-react";
+import { ArrowLeft, Binary, Shield, AlertCircle, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const ParityCheck = () => {
   const [input, setInput] = useState("1101");
   const [parityBit, setParityBit] = useState("");
-  const [error, setError] = useState(false);
-
+  const [error, setError] = useState("");
 
   const checkValidInput = (data: string) => {
-    // Check if input is a binary string (only contains 0s and 1s)    
     const isValid = /^[01]*$/.test(data);
     if (!isValid) {
-
-      alert("Please enter a valid binary string (only 0s and 1s).");
+      setError("Please enter a valid binary string (only 0s and 1s).");
       return false;
     }
+    setError("");
     return true;  
   }
 
   const calculateParity = (data: string) => {
-    if(!checkValidInput(data)) return; // Validate input before proceeding
+    if(!checkValidInput(data)) return;
     const ones = data.split('').filter(bit => bit === '1').length;
-    // Even parity: if number of 1s is odd, add 1; if even, add 0
     const parity = ones % 2 === 0 ? '0' : '1';
     setParityBit(parity);
   };
@@ -35,7 +33,11 @@ const ParityCheck = () => {
   const checkForErrors = (data: string, parity: string) => {
     const allBits = data + parity;
     const ones = allBits.split('').filter(bit => bit === '1').length;
-    setError(ones % 2 !== 0);
+    if (ones % 2 !== 0) {
+      setError("Error detected in data transmission!");
+    } else {
+      setError("");
+    }
   };
 
   return (
@@ -58,20 +60,28 @@ const ParityCheck = () => {
           <h2 className="mb-4 text-xl font-semibold">Interactive Demo</h2>
           <div className="space-y-4">
             <div>
-                    <Label htmlFor="data-input">Input Data</Label>
-                    <Input
-                    id="data-input"
-                    type="text"
-                    value={input}
-                    onChange={(e) => {
-                      setInput(e.target.value);
-                      setParityBit("");
-                    }}
-                    className="font-mono"
-                    maxLength={8}
-                    pattern="[0-1]*"
-                    />
-                  </div>
+              <Label htmlFor="data-input">Input Data</Label>
+              <Input
+                id="data-input"
+                type="text"
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  setParityBit("");
+                  setError("");
+                }}
+                className="font-mono"
+                maxLength={8}
+                pattern="[0-1]*"
+              />
+            </div>
+            {error && (
+              <Alert variant="destructive" className="bg-soft-red-50 border-soft-red-200">
+                <TriangleAlert className="h-4 w-4" />
+                <AlertTitle>Validation Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div className="flex gap-2">
               <Button
                 onClick={(e) => {
@@ -82,23 +92,16 @@ const ParityCheck = () => {
               >
                 Calculate Parity
               </Button>
-              {/* {parityBit && (
-                      <Button
-                        onClick={() => checkForErrors(input, parityBit)}
-                        variant="outline"
-                      >
-                        Check for Errors
-                      </Button>
-                      )} */}
             </div>
             {parityBit && (
               <div className="rounded-md bg-purple-50 p-4">
                 <p className="font-mono">Data with parity: {input + parityBit}</p>
-                {error !== null && (
-                  <div className={`mt-2 flex items-center gap-2 ${error ? 'text-red-500' : 'text-green-500'}`}>
-                    {error ? <AlertCircle className="h-4 w-4" /> : <Shield className="h-4 w-4" />}
-                    <span>{error ? 'Error detected!' : 'No errors detected'}</span>
-                  </div>
+                {error && (
+                  <Alert variant="destructive" className="mt-2 bg-soft-red-50 border-soft-red-200">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error Detection</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
                 )}
               </div>
             )}

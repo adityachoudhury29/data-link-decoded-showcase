@@ -1,42 +1,40 @@
 
 import { useState } from "react";
-import { ArrowLeft, Binary, Shield, Divide } from "lucide-react";
+import { ArrowLeft, Binary, Shield, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { set } from "date-fns";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const CRC = () => {
   const [message, setMessage] = useState("1101");
   const [generator, setGenerator] = useState("1001");
   const [crc, setCRC] = useState("");
-  const [verification, setVerification] = useState<boolean | null>(null);
+  const [error, setError] = useState("");
 
   const isValidInput = (data: string, poly: string) => {
-    // Check if input is a binary string (only contains 0s and 1s)
     const isValidData = /^[01]*$/.test(data);
     const isValidPoly = /^[01]*$/.test(poly);
     
     if (!isValidData || !isValidPoly) {
-      alert("Please enter valid binary strings (only 0s and 1s).");
+      setError("Please enter valid binary strings (only 0s and 1s).");
       return false;
     }
     
+    setError("");
     return true;
   }
 
   const calculateCRC = (data: string, poly: string) => {
-    if (!isValidInput(data, poly)) return; // Validate input before proceeding
+    if (!isValidInput(data, poly)) return;
     let dividend = data + "0".repeat(poly.length - 1);
     let divisor = poly;
     
-    // Convert to arrays for easier manipulation
     let curDiv = dividend.split('').map(Number);
     const divLength = divisor.length;
     
-    // Perform division
     for (let i = 0; i <= curDiv.length - divLength; i++) {
       if (curDiv[i] === 0) continue;
       
@@ -45,16 +43,13 @@ const CRC = () => {
       }
     }
     
-    // Get remainder (CRC)
     const remainder = curDiv.slice(-divLength + 1).join('');
     setCRC(remainder);
   };
 
   const verify = (data: string, poly: string, checksum: string) => {
-    // Attach CRC to original message
     const messageWithCRC = data + checksum;
     
-    // Perform division
     let curDiv = messageWithCRC.split('').map(Number);
     const divLength = poly.length;
     
@@ -66,8 +61,11 @@ const CRC = () => {
       }
     }
     
-    // If remainder is all zeros, no error was detected
-    setVerification(!curDiv.some(bit => bit === 1));
+    if (curDiv.some(bit => bit === 1)) {
+      setError("Error detected in data transmission!");
+    } else {
+      setError("");
+    }
   };
 
   return (
@@ -89,6 +87,13 @@ const CRC = () => {
         <Card className="p-6">
           <h2 className="mb-4 text-xl font-semibold">Interactive Demo</h2>
           <div className="space-y-4">
+            {error && (
+              <Alert variant="destructive" className="bg-soft-red-50 border-soft-red-200">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Input Validation</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div>
               <Label htmlFor="message-input">Message</Label>
               <Input
@@ -97,7 +102,9 @@ const CRC = () => {
                 value={message}
                 onChange={(e) => {
                   setCRC("");
-                  setMessage(e.target.value)}}
+                  setMessage(e.target.value);
+                  setError("");
+                }}
                 className="font-mono"
                 maxLength={8}
                 pattern="[0-1]*"
@@ -111,7 +118,9 @@ const CRC = () => {
                 value={generator}
                 onChange={(e) => {
                   setCRC("");
-                  setGenerator(e.target.value)}}
+                  setGenerator(e.target.value);
+                  setError("");
+                }}
                 className="font-mono"
                 maxLength={8}
                 pattern="[0-1]*"
@@ -137,11 +146,12 @@ const CRC = () => {
               <div className="rounded-md bg-purple-50 p-4">
                 <p className="font-mono">CRC: {crc}</p>
                 <p className="font-mono mt-2">Message with CRC: {message + crc}</p>
-                {verification !== null && (
-                  <div className={`mt-2 flex items-center gap-2 ${verification ? 'text-green-500' : 'text-red-500'}`}>
-                    <Shield className="h-4 w-4" />
-                    <span>{verification ? 'Valid! No errors detected' : 'Error detected!'}</span>
-                  </div>
+                {error && (
+                  <Alert variant="destructive" className="mt-2 bg-soft-red-50 border-soft-red-200">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error Detection</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
                 )}
               </div>
             )}

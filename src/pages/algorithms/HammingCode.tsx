@@ -1,29 +1,28 @@
-
 import { useState } from "react";
-import { ArrowLeft, Binary, Shield } from "lucide-react";
+import { ArrowLeft, Binary, Shield, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const HammingCode = () => {
   const [input, setInput] = useState("1011");
   const [encoded, setEncoded] = useState("");
   const [error, setError] = useState("");
-  const [corrected, setCorrected] = useState("");
 
   const isValidInput = (data: string) => {
-    // Check if input is a binary string (only contains 0s and 1s)
     const isValid = /^[01]*$/.test(data);
     if (!isValid) {
-      alert("Please enter a valid binary string (only 0s and 1s).");
+      setError("Please enter a valid binary string (only 0s and 1s).");
       return false;
     }
+    setError("");
     return true;
   }
 
   const encode = (data: string) => {
-    // Simple Hamming(7,4) implementation for demonstration
-    if (!isValidInput(data)) return; // Validate input before proceeding
+    if (!isValidInput(data)) return;
+    
     const d1 = parseInt(data[0]);
     const d2 = parseInt(data[1]);
     const d3 = parseInt(data[2]);
@@ -66,6 +65,13 @@ const HammingCode = () => {
                 pattern="[0-1]*"
               />
             </div>
+            {error && (
+              <Alert variant="destructive" className="bg-soft-red-50 border-soft-red-200">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Input Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <Button
               onClick={() => encode(input)}
               className="w-full bg-purple-600 hover:bg-purple-700"
