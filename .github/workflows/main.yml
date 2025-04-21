@@ -1,0 +1,19 @@
+name: Congratulate on Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  congrats:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post congratulatory comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🎉 Congrats @${{ github.event.pull_request.user.login }} on merging your PR! Great job!  
+            ![congrats](https://media.giphy.com/media/l0HlOvJ7yaacpuSas/giphy.gif)
