@@ -1,4 +1,4 @@
-# Data Link Layer Error Detection Demonstrations
+## Data Link Layer Error Detection Demonstrations
 
 This React-Vite project demonstrates various error detection techniques used in networking's Data Link Layer.
 
